@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="project_work_view_form">
+            <field name="model">project.work</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="project.work_view_form"/>
+            <field name="name">work_form</field>
+        </record>
+        <record model="ir.ui.view" id="work_current_effort_view_list">
+            <field name="model">project.work.current_effort</field>
+            <field name="type">tree</field>
+            <field name="name">work_current_effort_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_work_current_effort">
+            <field name="name">Current Effort</field>
+            <field name="res_model">project.work.current_effort</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_work_current_effort_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="work_current_effort_view_list"/>
+            <field name="act_window" ref="act_work_current_effort"/>
+        </record>
+    </data>
+</tryton>

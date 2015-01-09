@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook" position="inside">
+        <page name="current_efforts">
+            <label name="current_effort"/>
+            <field name="current_effort"/>
+            <label name="remain_hours"/>
+            <field name="remain_hours"/>
+            <field name="current_efforts" colspan="4"/>
+        </page>
+    </xpath>
+</data>
