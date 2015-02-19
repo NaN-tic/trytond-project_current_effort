@@ -26,7 +26,7 @@ class Work:
 
     def get_remain_hours(self, name):
         if not self.current_efforts:
-            return self.effort or 0 - self.hours or 0
+            return (self.effort or 0) - (self.hours or 0)
         return self.current_efforts[0].remain_hours
 
 
