@@ -35,15 +35,14 @@ class WorkCurrentEffort(ModelSQL, ModelView):
     __name__ = 'project.work.current_effort'
     _rec_name = 'date'
 
-
     remain_hours = fields.Float('Remain Hours', digits=(16, 2), required=True)
     work = fields.Many2One('project.work', 'Work', required=True, select=True)
     date = fields.Function(fields.DateTime('Date'), 'get_date')
-
-    def get_date(self, name):
-        return self.create_date
 
     @classmethod
     def __setup__(cls):
         super(WorkCurrentEffort, cls).__setup__()
         cls._order.insert(0, ('create_date', 'DESC'))
+
+    def get_date(self, name):
+        return self.create_date
