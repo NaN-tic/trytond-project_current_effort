@@ -3,6 +3,6 @@
      copyright notices and license terms. -->
 <tree string="Current Efforts" editable="top">
     <field name="date"/>
-    <field name="remain_hours"/>
+    <field name="remain_duration"/>
     <field name="work"/>
 </tree>

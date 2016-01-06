@@ -10,24 +10,24 @@ __metaclass__ = PoolMeta
 class Work:
     __name__ = 'project.work'
 
-    current_effort = fields.Function(fields.Float('Current Effort'),
+    current_effort = fields.Function(fields.TimeDelta('Current Effort',
+            'company_work_time'),
         'get_current_effort')
 
-    remain_hours = fields.Function(fields.Float('Remain Hours',
-        digits=(16, 2)), 'get_remain_hours', searcher='search_remain_hours')
+    remain_duration = fields.Function(fields.TimeDelta('Remain Duration',
+            'company_work_time'),
+        'get_remain_duration', searcher='search_remain_hours')
 
     current_efforts = fields.One2Many('project.work.current_effort', 'work',
         'Current Efforts')
 
     def get_current_effort(self, name):
-        if not self.current_efforts:
-            return self.effort
-        return (self.hours or 0) + (self.current_efforts[0].remain_hours or 0)
+        return self.timesheet_duration + self.remain_duration
 
-    def get_remain_hours(self, name):
+    def get_remain_duration(self, name):
         if not self.current_efforts:
-            return (self.effort or 0) - (self.hours or 0)
-        return self.current_efforts[0].remain_hours
+            return self.effort_duration - self.timesheet_duration
+        return self.current_efforts[0].remain_duration
 
 
 class WorkCurrentEffort(ModelSQL, ModelView):
@@ -35,7 +35,8 @@ class WorkCurrentEffort(ModelSQL, ModelView):
     __name__ = 'project.work.current_effort'
     _rec_name = 'date'
 
-    remain_hours = fields.Float('Remain Hours', digits=(16, 2), required=True)
+    remain_duration = fields.TimeDelta('Remain Duration', 'company_work_time',
+        required=True)
     work = fields.Many2One('project.work', 'Work', required=True, select=True)
     date = fields.Function(fields.DateTime('Date'), 'get_date')
 
