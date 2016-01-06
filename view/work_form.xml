@@ -6,8 +6,8 @@
         <page name="current_efforts">
             <label name="current_effort"/>
             <field name="current_effort"/>
-            <label name="remain_hours"/>
-            <field name="remain_hours"/>
+            <label name="remain_duration"/>
+            <field name="remain_duration"/>
             <field name="current_efforts" colspan="4"/>
         </page>
     </xpath>
