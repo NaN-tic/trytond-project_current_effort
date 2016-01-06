@@ -1,7 +1,10 @@
 #This file is part of Tryton.  The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
+import datetime
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import PoolMeta
+from trytond import backend
+from trytond.transaction import Transaction
 
 __all__ = ['Work', 'WorkCurrentEffort']
 __metaclass__ = PoolMeta
@@ -44,6 +47,27 @@ class WorkCurrentEffort(ModelSQL, ModelView):
     def __setup__(cls):
         super(WorkCurrentEffort, cls).__setup__()
         cls._order.insert(0, ('create_date', 'DESC'))
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+        sql_table = cls.__table__()
+
+        super(WorkCurrentEffort, cls).__register__(module_name)
+
+        # Migration from 3.4: change remain_hours into remain_duration
+        if table.column_exist('remain_hours'):
+            cursor.execute(*sql_table.select(sql_table.id,
+                    sql_table.remain_hours))
+            for id_, remain_hours in cursor.fetchall():
+                duration = datetime.timedelta(hours=remain_hours)
+                cursor.execute(*sql_table.update(
+                        [sql_table.remain_duration],
+                        [duration],
+                        where=sql_table.id == id_))
+            table.drop_column('remain_hours')
 
     def get_date(self, name):
         return self.create_date
