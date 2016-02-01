@@ -29,7 +29,8 @@ class Work:
 
     def get_remain_duration(self, name):
         if not self.current_efforts:
-            return self.effort_duration - self.timesheet_duration
+            return (self.effort_duration or datetime.timedelta(0)
+                - self.timesheet_duration)
         return self.current_efforts[0].remain_duration
 
 
