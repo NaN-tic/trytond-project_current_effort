@@ -1,0 +1,67 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:project.work,current_effort:"
+msgid "Current Effort"
+msgstr "Temps actual"
+
+msgctxt "field:project.work,current_efforts:"
+msgid "Current Efforts"
+msgstr "Temps actual"
+
+msgctxt "field:project.work,remain_duration:"
+msgid "Remain Duration"
+msgstr "Temps restant"
+
+msgctxt "field:project.work.current_effort,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:project.work.current_effort,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:project.work.current_effort,date:"
+msgid "Date"
+msgstr "Data"
+
+msgctxt "field:project.work.current_effort,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:project.work.current_effort,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:project.work.current_effort,remain_duration:"
+msgid "Remain Duration"
+msgstr "Temps restant"
+
+msgctxt "field:project.work.current_effort,work:"
+msgid "Work"
+msgstr "Treball"
+
+msgctxt "field:project.work.current_effort,write_date:"
+msgid "Write Date"
+msgstr "Usuari creació"
+
+msgctxt "field:project.work.current_effort,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "model:ir.action,name:act_work_current_effort"
+msgid "Current Effort"
+msgstr "Temps actual"
+
+msgctxt "model:project.work.current_effort,name:"
+msgid "Work Schedule"
+msgstr "Planificador"
+
+msgctxt "view:project.work.current_effort:"
+msgid "Current Efforts"
+msgstr "Temps actual"
+
+msgctxt "view:project.work.current_effort:"
+msgid "Time"
+msgstr "Temps"
