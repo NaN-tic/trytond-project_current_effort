@@ -1,40 +1,39 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 import datetime
-import doctest
 import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
-from trytond.tests.test_tryton import ModuleTestCase
-from trytond.transaction import Transaction
+from trytond.tests.test_tryton import ModuleTestCase, with_transaction
+from trytond.pool import Pool
+from trytond.modules.company.tests import create_company, set_company
 
 
-class TestCase(ModuleTestCase):
-    'Test module'
+class ProjectCurrentEffortTestCase(ModuleTestCase):
+    'Test Project Current Effort module'
     module = 'project_current_effort'
 
-    def setUp(self):
-        super(TestCase, self).setUp()
-        self.timesheet_work = POOL.get('timesheet.work')
-        self.timesheet_line = POOL.get('timesheet.line')
-        self.project_work = POOL.get('project.work')
-        self.company = POOL.get('company.company')
-        self.employee = POOL.get('company.employee')
-        self.effort = POOL.get('project.work.current_effort')
-
+    @with_transaction()
     def test_efforts(self):
         'Test efforts'
-        with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            company, = self.company.search([
-                    ('rec_name', '=', 'Dunder Mifflin'),
-                    ])
+        pool = Pool()
+        Party = pool.get('party.party')
+        TimesheetWork = pool.get('timesheet.work')
+        TimesheetLine = pool.get('timesheet.line')
+        ProjectWork = pool.get('project.work')
+        Employee = pool.get('company.employee')
+        Effort = pool.get('project.work.current_effort')
 
-            t_work, = self.timesheet_work.create([{
+        party, = Party.create([{
+                    'name': 'Pam Beesly',
+                    }])
+        company = create_company()
+        with set_company(company):
+            t_work, = TimesheetWork.create([{
                         'name': 'Work 1',
                         'company': company.id,
                         'timesheet_available': True,
                         }])
-            p_work, = self.project_work.create([{
+            p_work, = ProjectWork.create([{
                         'name': 'Work 1',
                         'company': company.id,
                         'work': t_work.id,
@@ -45,9 +44,12 @@ class TestCase(ModuleTestCase):
             self.assertEqual(p_work.remain_duration,
                 datetime.timedelta(hours=1))
 
-            employee, = self.employee.search([('company', '=', company.id)])
+            employee, = Employee.create([{
+                        'party': party.id,
+                        'company': company.id,
+                        }])
 
-            self.timesheet_line.create([{
+            TimesheetLine.create([{
                         'employee': employee.id,
                         'company': company.id,
                         'work': t_work.id,
@@ -55,11 +57,11 @@ class TestCase(ModuleTestCase):
                         }])
 
             self.assertEqual(p_work.current_effort,
-                datetime.timedelta(hours=1))
+                datetime.timedelta(minutes=90)) # 1:30
             self.assertEqual(p_work.remain_duration,
-                datetime.timedelta(minutes=30))
+                datetime.timedelta(minutes=60)) # 1:00
 
-            self.effort.create([{
+            Effort.create([{
                         'work': t_work.id,
                         'remain_duration': datetime.timedelta(hours=1),
                         }])
@@ -72,9 +74,6 @@ class TestCase(ModuleTestCase):
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    from trytond.modules.company.tests import test_company
-    for test in test_company.suite():
-        if test not in suite and not isinstance(test, doctest.DocTestCase):
-            suite.addTest(test)
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestCase))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+        ProjectCurrentEffortTestCase))
     return suite

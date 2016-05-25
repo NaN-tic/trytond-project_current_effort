@@ -7,20 +7,17 @@ from trytond import backend
 from trytond.transaction import Transaction
 
 __all__ = ['Work', 'WorkCurrentEffort']
-__metaclass__ = PoolMeta
 
 
 class Work:
+    __metaclass__ = PoolMeta
     __name__ = 'project.work'
-
     current_effort = fields.Function(fields.TimeDelta('Current Effort',
             'company_work_time'),
         'get_current_effort')
-
     remain_duration = fields.Function(fields.TimeDelta('Remain Duration',
             'company_work_time'),
         'get_remain_duration', searcher='search_remain_hours')
-
     current_efforts = fields.One2Many('project.work.current_effort', 'work',
         'Current Efforts')
 
@@ -52,8 +49,8 @@ class WorkCurrentEffort(ModelSQL, ModelView):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        cursor = Transaction().connection.cursor()
+        table = TableHandler(cls, module_name)
         sql_table = cls.__table__()
 
         super(WorkCurrentEffort, cls).__register__(module_name)
