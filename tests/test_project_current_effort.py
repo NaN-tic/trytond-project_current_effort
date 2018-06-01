@@ -55,9 +55,9 @@ class TestCase(ModuleTestCase):
                         }])
 
             self.assertEqual(p_work.current_effort,
-                datetime.timedelta(hours=1))
+                datetime.timedelta(minutes=90))
             self.assertEqual(p_work.remain_duration,
-                datetime.timedelta(minutes=30))
+                datetime.timedelta(minutes=60))
 
             self.effort.create([{
                         'work': t_work.id,
